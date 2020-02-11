@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketFormRequest;
+use App\Mail\SendEmail;
 use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TicketsController extends Controller
 {
@@ -46,7 +48,8 @@ class TicketsController extends Controller
             'slug' => $slug
         ));
         $ticket->save();
-
+        $data = ['email' => 'vu.tuan.giang@sun-asterisk.com', 'slug' => $slug,'viewName' => 'emails.ticket', 'subject' => 'test sendmail'];
+        Mail::to($data['email'])->send(new SendEmail($data)) ;
         return redirect('/contact')->with('status', 'Your ticket has been created! Its unique id is: '.$slug);
     }
 
